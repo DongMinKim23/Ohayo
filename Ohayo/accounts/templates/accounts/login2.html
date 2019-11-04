@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+    {% load static %}
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'signup/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Yeon+Sung" rel="stylesheet">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'signup/css/signup_style.css' %}">
+    <link rel="stylesheet" href="{% static 'signup/css/form_style.css' %}">
+</head>
+<body>
+    {% load static %}
+    {% load crispy_forms_tags %}
+    <div class="main">
+
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container" style="text-align: center;">
+                <div class="signup-content">
+                    <form method="POST">
+                        <h2 class="form-title">Login</h2>
+                        {% csrf_token %}
+                        {{ login_form|crispy }}
+                        <input type="submit" value="로그인" style="font-family: 'Yeon Sung', cursive; font-size: large;">
+                    </form>
+                    <p class="loginhere">
+                        계정이 없으신가요? <a href="{% url 'accounts:signup' %}" class="loginhere-link">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'signup/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'signup/js/login_main.js' %}"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

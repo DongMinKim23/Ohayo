@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %} {% block title %}{% endblock %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'movies/stylesheets/select.css' %}" />{% load static %}
+<!-- Font Icon -->
+<link rel="stylesheet" href="{% static 'signup/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Yeon+Sung" rel="stylesheet">
+
+<!-- Main css -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'signup/css/index.css' %}">
+<link rel="stylesheet" href="{% static 'signup/css/button.css' %}">
+<link rel="stylesheet" href="{% static 'signup/css/form_style.css' %}"> {% endblock %} {% block body %}
+    {% load static %}
+    <img class="centerBanner" src="" onerror="this.src='{% static 'movies/images/DJ1.jpg' %}'" style="height:400px; width:400px;"></img>
+    <!--onerror="this.src='/test/noImg.gif'-->
+    <div class="container">
+        <ul class="ks-cboxtags">
+            {% for keyword in keywords %}
+            <li><input type="checkbox" id="{{ keyword.pk }}" data-id="{{ keyword.pk }}" class="click-like" value="{{ keyword.name }}">
+                <label for="{{ keyword.pk }}" class="hoverImg" data-img="{{ keyword.key_image }}">{{ keyword.name }}</label>
+            </li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+    <a href="{% url 'movies:content' %}" class="d-flex rainbow rainbow-1 justify-content-center align-items-center" style="color: black; text-decoration:none; width: 200px; height: 200px;"><i class="far fa-paper-plane fa-7x"></i><a/>
+{% endblock %} {% block script %}
+<script>
+    let clickLikes = document.querySelectorAll('.click-like')
+
+    clickLikes.forEach(function(clicklike) {
+        clicklike.addEventListener('click', function(e) {
+            const keywordId = e.target.dataset.id
+            console.log(keywordId)
+            axios.get(`/movies/${keywordId}/like/`).then(function(res) {
+                console.log(res.data.is_like)
+                // if (res.data.is_like){
+                // e.target.classList.remove('far')
+                // e.target.classList.add('fas')
+                //     }
+                // else {
+                // e.target.classList.remove('fas')
+                // e.target.classList.add('far')
+                //     }
+            })
+        })
+    })
+    var imgs = document.querySelectorAll('.hoverImg')
+    // console.log(img)
+    imgs.forEach(function(img){
+    img.addEventListener('mouseover', function(e) {
+        console.log(e.target.dataset.img)
+        image = e.target.dataset.img
+        let srctag = document.querySelector('.centerBanner')
+        console.log(srctag)
+        srctag.src = image
+        // srctag.addEventListener('mouseout', function(e){
+        //     srctag.src = ''
+        // })
+        })
+    })
+
+
+
+
+    // let imgs = document.querySelectorAll('#centerBanner')
+    // imgs.forEach(function(img){
+    //     img.addEventListener('mouseover',function(e){
+    //         console.log(e.target.dataset.id)  
+    //         })
+    // })
+</script>
+{% endblock %}

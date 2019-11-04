@@ -1,0 +1,108 @@
+{% extends 'base.html'%} 
+{% block css %}
+{% load static %}
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png">
+    <!-- Plugin-CSS -->
+    <link rel="stylesheet" href="{% static 'static/content/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/css/animate.css' %}">
+    <!-- Main-Stylesheets -->
+    <link rel="stylesheet" href="{% static 'static/content/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/style.css' %}">
+    <link rel="stylesheet" href="{% static 'static/content/css/responsive.css' %}">
+    <script src="{% static 'static/contetent/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+{% endblock %}
+{% block body %}
+
+<!--<a href="{% url 'accounts:logout' %}">로그아웃</a>-->
+<a href="{% url 'movies:clear' %}">다시 선택</a>
+<h1>{{user}}님이 여행하고 싶은 영화</h1>
+<a href="{% url 'accounts:my_movie' %}">담은 영화</a></a>
+    <h4>
+        {% for movie in movies %}
+        <i> <img src="{{movie.imageUrl}}" style="width: 150px; height: 150px;"></i> {% endfor %}</h4>
+    <div id="app">
+    <hr> {% for keyword in user_keywords %} {% if keyword.movies.all %}
+    <h2> # {{keyword.name}}</h2>
+    {% for key_movie in keyword.movies.all %}
+    <button type="button" class="btn btn-white" data-toggle="modal" data-target="#exampleModal-{{key_movie.id}}" style="padding-top:0px; padding-bottom:0px;">
+              <!--d block으로 나머지 공간에 마진을 만들고 ml-auto는 해당 구역 왼쪽에 그 마진을 할당하여 오른쪽으로 밀리게한다.-->
+            <img src="{{ key_movie.imageUrl }}" style="width: 300px; height: 300px;">
+    </button>
+    {% include 'movies/show_detail.html' %}
+    <p class="movieCd" style="display: none;">{{ key_movie.code }}</p>
+    <p class="movieLike" style="display: none;">{{ key_movie.is_like }}</p>
+    <p class="likeCount" style="display: none;">{{ key_movie.baged_users.all.count }}</p>
+    <div v-for="movie in movies">
+        <span v-if="movie.movieCd === '{{ key_movie.code }}'" v-text="movie.movieNm"></span>
+        <i v-if="movie.movieCd === '{{ key_movie.code }}'" @click="likeMovies(movie, '{{ key_movie.pk }}')"
+               :class="{fas: movie.is_like, far: !movie.is_like, 'fa-heart': true}"
+               style="color:red">
+       </i><br v-if="movie.movieCd === '{{ key_movie.code }}'">
+       <span v-if="movie.movieCd === '{{ key_movie.code }}'"><span v-text="movie.likeCount"></span>명이 담아둔 영화</span>
+    </div>
+    <hr> {% endfor %} {% endif %} {% endfor %}</div>
+
+
+
+{% endblock %} {% block script %}
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            movies : [],
+        },
+        mounted: function() {
+            this.getMovies()
+        
+        },
+        methods: {
+            getMovies: function() {
+                let movieList = document.querySelectorAll('.movieCd')
+                let movieLike = document.querySelectorAll('.movieLike')
+                let likeCount = document.querySelectorAll('.likeCount')
+                console.log(movieList)
+                console.log(movieLike)
+                console.log(likeCount)
+                movieList.forEach(function(movie) {
+                    url=`http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=dc062d6001f402446fc226e2399d815a&movieCd=${movie.innerText}`
+                    axios.get(url)
+                        .then(res => {
+                            console.log(res)
+                            app.$data.movies.push(res.data.movieInfoResult.movieInfo)
+                            app.$data.movies = app.$data.movies.map((movie) => {
+                                console.log(movieLike[0].innerText)
+                                if (movieLike[0].innerText === 'True') {
+                                    return {...movie, is_like: true, likeCount: likeCount[0].innerText}
+                                } else {
+                                    return {...movie, is_like: false, likeCount: likeCount[0].innerText}
+                                }
+                            })
+                            console.log(app.$data.movies)
+                            // console.log(res.data.movieInfoResult.movieInfo)
+                            // this.movies.push(res.data.movieInfoResult.movieInfo)
+                        })
+                })
+            },
+            likeMovies: function(movie, moviePk) {
+               axios.get(`/movies/${moviePk}/movie_like/`)
+               .then(response => {
+                   console.log(response)
+                   movie.is_like = !movie.is_like
+                   console.log(movie.likeCount)
+                   if (movie.is_like) {
+                       console.log(Number(movie.likeCount)+1)
+                       movie.likeCount = Number(movie.likeCount)+1
+                   } else {
+                       console.log(Number(movie.likeCount)-1)
+                       movie.likeCount = Number(movie.likeCount)-1
+                   }
+               })
+               .catch(error => console.log(error))
+           },
+        }
+    })
+</script>
+{% endblock %}

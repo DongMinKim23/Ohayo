@@ -1,0 +1,41 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal-{{key_movie.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content" style="width:450px;">
+     
+      <div class="modal-body" style="position:relative;height:700px;">
+        <div class="row">
+        <div class="col-md-12">
+          <div id="carousel-{{key_movie.id}}" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                {% for image in key_movie.image_set.all %}
+                <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                  <img src="{{ image.mv_key_img}}" class="d-block w-100" style="width:300px; height:400px;" alt="">
+                </div>
+                {% endfor %}
+              </div>
+              <a class="carousel-control-prev" href="#carousel-{{key_movie.id}}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carousel-{{key_movie.id}}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+          </div>
+        </div>
+        
+        </div>
+        <br> 
+        {% for keyword in key_movie.keywords.all %}
+        <p> # {{keyword.name}} </p>
+        {% endfor %}
+        <br>
+        <p>{{key_movie.baged_users.count}}명이 담아둔 영화입니다</p>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+</div>

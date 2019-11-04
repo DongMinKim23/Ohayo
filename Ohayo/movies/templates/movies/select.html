@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}취향 선택{% endblock %}
+{% block css %}
+{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'movies/stylesheets/select.css' %}" />
+{% endblock %}
+{% block body %}
+    <div class="container">
+      <ul class="ks-cboxtags">
+        {% for keyword in keywords %}
+        <li><input type="checkbox" id="{{ keyword.pk }}" value="{{ keyword.name }}"><label for="{{ keyword.pk }}">{{ keyword.name }}</label></li>
+        {% endfor %}      
+      </ul>
+    
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+<div class="container">
+<form method='POST'>
+    {% csrf_token %}
+    {{ signup_form|crispy }}
+    <input type="submit" value="회원가입">
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<title>Hover Effect Ideas | Set 2</title>
+		<meta name="description" content="Hover Effect Ideas: Inspiration for subtle hover effects" />
+		<meta name="keywords" content="hover effect, inspiration, grid, thumbnail, transition, subtle, web design" />
+		<meta name="author" content="Codrops" />
+		{% load static %}
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link href='http://fonts.googleapis.com/css?family=Raleway:400,800,500,600' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="{% static 'movies/stylesheets/main.css' %}" />
+	</head>
+	<body>
+	    {% load static %}
+			<div class="content">
+				<div class="grid">
+					<figure class="effect-apollo">
+						<img src="{% static 'movies/images/background.jpg' %}"/>
+						<figcaption>
+							<h1>대전 1반 <span style="margin-left: 20px;">Ohayo</span></h1>
+							{% if user.is_authenticated %}
+							<h2><p class="n1"><a style="color:white; text-decoration:none" href="{% url 'movies:index' %}">영화 고르기</a></p></h2>
+							<h2><p class="n2"><a style="color:white; text-decoration:none" href="{% url 'accounts:logout' %}">로그아웃</a></p></h2>
+							{% else %}
+							<h2><p class="n1"><a style="color:white; text-decoration:none" href="{% url 'accounts:signup' %}">회원가입</a></p></h2>
+							<h2><p class="n2"><a style="color:white; text-decoration:none" href="{% url 'accounts:login' %}">로그인</a></p></h2>
+							{% endif %}
+						</figcaption>			
+					</figure>
+				</div><!-- /container -->
+		<script>
+			// For Demo purposes only (show hover effect on mobile devices)
+			[].slice.call( document.querySelectorAll('a[href="#"') ).forEach( function(el) {
+				el.addEventListener( 'click', function(ev) { ev.preventDefault(); } );
+			} );
+		</script>
+	</body>
+</html>

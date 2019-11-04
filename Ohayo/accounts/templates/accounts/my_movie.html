@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h3 class="my-5" style="text-align: center; font-family: 'Jua', sans-serif;">{{ user }}님이 담은 영화</h3>
+
+<ul class="nav justify-content-center">
+    {% for movie in my_movies %}
+    <li class="nav-item">
+        <a class="nav-link active" href="#{{ movie.pk }}"><img src="{{ movie.imageUrl }}" style="width: 180px; height:360px;"></a>
+        <p class="text-center">{{ movie.title }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
